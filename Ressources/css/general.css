@@ -1,0 +1,41 @@
+/*  MISE EN FORME GENERALE DU VISUEL VISITEUR
+    définition du background et du style des titres */
+*
+{
+    font-family: "calibri";
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    min-height: 100vh;
+    background-image: url(../images/covercrops.jpg);
+    background-size: cover;
+}
+
+h1
+{
+    color: brown;
+    text-align: center;
+    font-size: 48;
+}
+
+h2
+{
+    color: brown;
+    font-size: 28;
+    text-align: center;
+}
+
+.imgLogo
+{
+    position: relative;
+    display: block;
+    margin: 1% auto 1% auto;
+    text-align: center;
+    height: 19%;
+    width: auto;
+}
+

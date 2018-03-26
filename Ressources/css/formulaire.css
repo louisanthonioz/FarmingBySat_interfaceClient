@@ -1,0 +1,320 @@
+/*  MISE EN FORME DU FORMULAIRE DE DONNEES 
+    Les différentes étapes sont indépendantes, elles suivent la nomenclature du index.html
+    Il y a aussi une partie Checkbox, qui permet la mise en forme des cases à cocher,
+    une partie liste déroulante, qui permet la mise en forme des listes déroulantes
+    et enfin une partie RESPONSIVE, qui gère la mise en forme pour mobile et tablette */
+
+.imgExplications
+{
+    display:inline-block;
+    position: relative;
+    margin: 2% 4% 2% auto;
+    padding: 2%;
+    height: 48vh;
+    width: 70vh;
+    box-shadow: 0 0 16px grey;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.8);
+    float: right;
+}
+
+#firstStep
+{
+    display: inline-block;
+    margin: 2% auto 2% 4%;
+    padding: 2%;
+    height: 48vh;
+    width: 70vh;
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0 0 16px grey;
+    border-radius: 5px;
+    float: left;
+}
+
+#secondStep
+{
+    display: none;
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0 0 16px grey;
+    border-radius: 5px;
+    position: relative;
+    margin: 0% auto auto auto;
+    text-align: center;
+    width: 120vh;
+}
+
+#secondStepMap
+{
+    display: none;
+    height: 78vh;
+    width: 120vh;
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0 0 16px grey;
+    border-radius: 5px;
+    position: relative;
+    margin: 1% auto 1% auto;
+    text-align: center;
+}
+
+#secondStepText
+{
+    display: none;
+    padding-bottom: 1%;
+}
+
+#thirdStep
+{
+    display: none;
+    margin: 2% auto 2% 4%;
+    padding: 2%;
+    height: auto;
+    width: 70vh;
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0 0 16px grey;
+    border-radius: 5px;
+    position: relative;
+    margin: 1% auto 1% auto;
+    text-align: center;
+}
+
+#fourthStep
+{
+    display: none;
+    margin: 2% auto 2% 4%;
+    padding: 2%;
+    height: auto;
+    width: 70vh;
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0 0 16px grey;
+    border-radius: 5px;
+    position: relative;
+    margin: 1% auto 1% auto;
+    text-align: center;
+}
+
+#FinalStep
+{
+    display: none;
+    margin: 2% auto 2% 4%;
+    padding: 2%;
+    height: auto;
+    width: 70vh;
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0 0 16px grey;
+    border-radius: 5px;
+    position: relative;
+    margin: 1% auto 1% auto;
+    text-align: center;
+}
+
+input
+{
+    display: inline-block;
+    font-size: 2vh;
+    border-radius: 1vh;
+    height: auto;
+    width: 30vh;
+    background-color: rgba(128,128,128,0.3);
+    border: none;
+    margin: 1vh 2vh 1vh 2vh;
+    padding: 2vh;
+}
+
+select
+{
+    display: inline-block;
+    font-size: 2vh;
+    border-radius: 1vh;
+    height: auto;
+    width: 30vh;
+    background-color: rgba(128,128,128,0.3);
+    border: none;
+    margin: 1vh 2vh 1vh 2vh;
+    padding: 2vh;
+}
+
+#validateur, #NextParc, #finalizeForm
+{
+    display: block;
+    position: relative;
+    color: white;
+    background-color: brown;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#finalizeForm
+{
+    display: none;
+}
+
+#pac
+{
+    display: block;
+    position: relative;
+    color: white;
+    background-color: brown;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+}
+
+#checkboxesZones
+{
+    text-align: left;
+    margin: auto;
+    width: -moz-fit-content;
+}
+
+#rdt
+{
+    width: -moz-available;
+}
+
+#advdis
+{
+    width: -moz-available;
+    height: 24vh;
+}
+
+
+#zoneVulnerableIn, #zoneProtegeeIn, #natura2000In
+{
+    width: auto;
+}
+
+#declarationPAC, #titreEtape4, 
+{
+    margin: 2vh;
+    font-size: 20px;
+    font-weight: bold;
+    color: brown;
+}
+
+[name="uploads[]"]
+{
+    width: auto;
+}
+
+/**************************** Partie Checkbox ************************/
+/* Cachons la case à cocher */
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+  position: absolute;
+  left: -9999px;
+}
+
+/* on prépare le label */
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+}
+
+/* Aspect des checkboxes */
+/* :before sert à créer la case à cocher */
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+  content: '';
+  position: absolute;
+  left:0; top: 2px;
+  width: 15px; height: 15px; /* dim. de la case */
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+  border-radius: 3px; /* angles arrondis */
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.3) /* légère ombre interne */
+}
+
+/* Aspect général de la coche */
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+  content: '✔';
+  position: absolute;
+  top: 0; left: 4px;
+  font-size: 14px;
+  color: brown;
+  transition: all .2s; /* on prévoit une animation */
+}
+/* Aspect si "pas cochée" */
+[type="checkbox"]:not(:checked) + label:after {
+  opacity: 0; /* coche invisible */
+  transform: scale(0); /* mise à l'échelle à 0 */
+}
+/* Aspect si "cochée" */
+[type="checkbox"]:checked + label:after {
+  opacity: 1; /* coche opaque */
+  transform: scale(1); /* mise à l'échelle 1:1 */
+}
+
+/* aspect désactivée */
+[type="checkbox"]:disabled:not(:checked) + label:before,
+[type="checkbox"]:disabled:checked + label:before {
+  box-shadow: none;
+  border-color: #bbb;
+  background-color: #ddd;
+}
+/* styles de la coche (si cochée/désactivée) */
+[type="checkbox"]:disabled:checked + label:after {
+  color: #999;
+}
+/* on style aussi le label quand désactivé */
+[type="checkbox"]:disabled + label {
+  color: #aaa;
+}
+
+/* aspect au focus de l'élément */
+[type="checkbox"]:checked:focus + label:before,
+[type="checkbox"]:not(:checked):focus + label:before {
+  border: 1px dotted brown;
+}
+/*************************************************************************/
+/*********************** Liste déroulante ********************************/
+#precRot, #nextRot
+{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    overflow: hidden;
+    background: url(../images/newArrow.png) no-repeat center rgba(128,128,128,0.3);
+    text-align: center;
+}
+
+option[value=""][disabled] {
+  display: none;
+}
+/**************************************************************************/
+/****************************** RESPONSIVE ********************************/
+@media screen and (max-width: 1040px)
+{
+    .imgExplications
+    {
+        margin: 2% 1.5% 2% auto;
+    }
+
+    #firststep
+    {
+        margin: 2% auto 2% 1.5%;
+    }
+}
+
+@media screen and (max-width: 950px)
+{
+    .imgExplications
+    {
+        position: relative;
+        display: block;
+        float: none;
+        margin: 2% auto 2% auto;
+    }
+
+    #firststep
+    {
+        position: relative;
+        display: block;
+        float: none;
+        margin: 2% auto 2% auto;
+    }
+}
+
+/***************************************************/
+

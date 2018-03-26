@@ -1,0 +1,309 @@
+<!--    Ce fichier est le visuel visiteur du serveur, il contient les formulaires
+        destinés à l'agriculteur. Les informations sont récoltés par le script formular.js
+        et stockés dans une base de données
+        La mise en forme du formulaire est effectuée dans le fichier formulaire.css  -->
+<head>
+    <!-- Penser à placer le nom de la startup dans le title -->
+    <title>Mon copain le satellite</title>
+    <meta charset="utf-8"></meta>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?signed_in=true"></script>
+    <link rel="stylesheet" type="text/css" href="css/general.css"/>
+    <link rel="stylesheet" type="text/css" href="css/formulaire.css"/>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/formular.js"></script>
+    <script src="js/connect.js"></script>
+    <script src="js/upload.js"></script>
+</head>
+<body onload="hideElements()">
+    
+    <!-- Penser à placer le nom de la startup dans le h1 -->
+    <header class="enTete">
+        <h1>Vos couverts végétaux</h1>
+    </header>
+    
+    <!-- Première image à droite, qui explique le fonctionnement de la startup -->
+    <img id="explainImages" class="imgExplications" src="images/explications.jpg"/>
+
+    <!-- Formulaire d'inscription, première étape, comprend :
+            - Nom, prénom
+            - Numéro téléphone, adresse e-mail
+            - Rue, Code postal, Ville   -->
+    <div id="firstStep">
+        <h2>INSCRIVEZ-VOUS</h2>
+      <p>
+        <input type="text" placeholder="Nom" id="name" />
+        <input type="text" placeholder="Prénom" id="firstname" />
+      </p>
+      <p>
+        <input type="tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" placeholder="Numéro de Téléphone" id="phone" />
+        <input type="email" placeholder="Adresse Email" id="mail" />
+      </p>
+      <p>
+        <input type="text" placeholder="Rue" id="adress" />
+        <input type="text" placeholder="Code Postal" id="postalCode" />
+      </p>
+      <p>
+        <input type="text" placeholder="Ville" id="city" />
+      </p>
+      <p>
+        <input type="button" value="Suivant" onclick="goSecondStep()" id="validateur"/>
+      </p>
+    </div>
+
+    <!--    Lors de cette deuxième étape, on propose une carte google map, avec au choix vue gps ou vue satellite,
+            et on demande à l'agriculteur de renseigner un rectangle qui comprend l'ensemble de ses champs
+            à l'aide de deux curseurs position  -->
+    <div id="secondStep">
+      <div id="secondStepMap">
+      </div>
+      <div id="secondStepText">
+        <h3>
+          Cliquez sur la carte pour disposer deux balises, de manière à ce que vos parcelles se trouvent dans un rectangle.
+        </h3>
+      </div>
+    </div>
+
+    <!--    Troisième étape du formulaire, on demande à l'agriculteur de renseigner son nombre d'hectare total, et 
+            le nombre de parcelles où il souhaite obtenir un conseil pour son couvert végétal
+            Ensuite, on lui demande si il a des parcelles en zone vulnérable, protégée ou en natura 2000
+            Enfin, il envoie sa déclaration de PAC via un bouton explorer -->
+    <div id="thirdStep">
+      <h2>INFORMATIONS GENERALES SUR VOS PARCELLES</h2>
+    </br>
+      <p>
+        <input type="text" placeholder="Nombre d'hectares total" id="nbH2" />
+      </p>
+      <p>
+        <input type="text" placeholder="Nombre de parcelles pour couverts" id="nbParc" />
+      </p>
+
+
+
+        <div id="checkboxesZones">
+          <p>
+            <input id="zoneVulnerableIn" type="checkbox"/>
+            <label for="zoneVulnerableIn">Zones Vulnérables</label>
+          </p>
+          <p>
+              <input id="zoneProtegeeIn" type="checkbox"/>
+              <label for="zoneProtegeeIn">Zones Protégées</label>
+          </p>
+          <p>
+              <input id="natura2000In" type="checkbox"/>
+              <label for="natura2000In">Natura 2000</label>
+          </p>
+        </div>
+        <p id="declarationPAC">
+          Déclaration PAC: <input id="pac" type="file" name="uploads[]">
+        </p>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <p>
+          <input type="button" value="Suivant" onclick="goFourthStep()" id="validateur"/>
+        </p>
+    </div>
+
+    <!--    Pour chaque parcelle où l'agriculteur souhaite un conseil agronomique, on lui demande les informations suivantes:
+            - Quelle est la culture précédente sur cette parcelle ?
+            - Quelle culture prévue ensuite ?
+            - Si l'agri les a (=facultatif) la carte de fertilisation Farmstar, les analyses de sol, un bilan azoté / hydrique,
+            une cartographie de rendement, et remarques complémentaires sur la parcelle -->
+    <div id="fourthStep">
+      <h2 id="emptyTitleParc"></h2>
+      <p id="titreEtape4">Informations sur vos cultures</p>
+      <p>
+        <label>Votre culture précédente :</label>
+        <select id="precRot">
+          <option value="" id="choix"  disabled selected>Sélectionnez ici</option>
+          <option value="Blé assolé">Blé assolé</option>
+          <option value="Blé de blé">Blé de blé</option>
+          <option value="Orge d'hiver">Orge d'hiver</option>
+          <option value="Orge de printemps">Orge de printemps</option>
+          <option value="Pois ou féverole">Pois ou féverole</option>
+          <option value="Soja">Soja</option>
+          <option value="Légume d'industrie">Légume d'industrie</option>
+          <option value="Maïs">Maïs</option>
+          <option value="Sorgho">Sorgho</option>
+          <option value="Betterave sucrière">Betterave sucrière</option>
+          <option value="Pomme de terre">Pomme de terre</option>
+          <option value="Tournesol">Tournesol</option>
+          <option value="Lin">Lin</option>
+          <option value="Tabac (Virginie)">Tabac (Virginie)</option>
+          <option value="Tabac (Burley)">Tabac (Burley)</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </p>
+      <p>
+        <label>Votre culture suivante :</label>
+        <select id="nextRot">
+          <option value="" id="choix"  disabled selected>Sélectionnez ici</option>
+          <option value="Blé assolé">Blé assolé</option>
+          <option value="Blé de blé">Blé de blé</option>
+          <option value="Orge d'hiver">Orge d'hiver</option>
+          <option value="Orge de printemps">Orge de printemps</option>
+          <option value="Pois ou féverole">Pois ou féverole</option>
+          <option value="Soja">Soja</option>
+          <option value="Légume d'industrie">Légume d'industrie</option>
+          <option value="Maïs">Maïs</option>
+          <option value="Sorgho">Sorgho</option>
+          <option value="Betterave sucrière">Betterave sucrière</option>
+          <option value="Pomme de terre">Pomme de terre</option>
+          <option value="Tournesol">Tournesol</option>
+          <option value="Lin">Lin</option>
+          <option value="Tabac (Virginie)">Tabac (Virginie)</option>
+          <option value="Tabac (Burley)">Tabac (Burley)</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </p>
+		<p id="declarationPAC">
+		Plan de fumure * <input  id= "fumure" type="file" name="uploads[]" >
+		</p>
+      <p id="declarationPAC">
+        Cartographie de Fertilisation Farmstar * <input id="fertFarmStar" type="file" name="uploads[]">
+      </p>
+      <p id="declarationPAC">
+        Analyses de Sol * <input id="anaSol" type="file" name="uploads[]" >
+      </p>
+      <p id="declarationPAC">
+        Reliquats sortie d'hiver * <input id="bilan" type="file" name="uploads[]" multiple>
+      </p>
+
+      <input type="text" id="rdt" placeholder="Renseignez vos rendements par h2 pour cette parcelle:">
+      <p id="declarationPAC">
+        Cartographie de rendement *<input id="cartoRdt" type="file" name="uploads[]"/>
+		</p>
+
+
+
+      <!--  Grand champ de texte -->
+     <p>Avantages et inconvénients de la parcelle?<input type="text" id="advdis" placeholder=" avantages et inconvénients"/></p>
+
+
+
+
+  <!--en dessous: les informations à ajouter concernant Quelle est sa date prévisionnelle de récolte de la culture précédente-->
+
+
+
+
+
+        <p id="declarationPAC"> Date récolte précédente <input id="daterecolte" type="text" placeholder="date"  />
+        </p>
+
+<!--6. Son type de semoirs pour les couverts végétaux avec un menu déroulant cf.p.73. (Semoirs à céréales, semoirs à la volée, semoirs de semis direct, etc.)-->
+        
+    <p id="declarationPAC">
+    <tr>
+      <td>Type de semoirs pour les couverts végétaux</td>
+      <td>
+      <select  id="semoirs">
+        <option></option>
+        <option>Semoirs à céréales</option>
+        <option>Semoirs à la volée</option>
+        <option>Semoirs de semis direct</option>
+       
+      
+      </select>
+      </td>
+    
+    </tr><br/>
+    <p>
+
+<!--7. Mode de destruction du couvert cf.p.62. (Chimique, broyage, labour, gel, déchaumage)-->
+
+    <p id="declarationPAC">
+     <tr>
+      <td>Mode de destruction du couvert</td>
+      <td>
+      <select id="modeDestruction">
+        <option></option>
+        <option>Chimique</option>
+        <option>Broyage</option>
+        <option>Labour</option>
+        <option>Gel</option>
+        <option>Déchaumage</option>
+      </select>
+      </td>
+    
+    </tr><br/>
+  </p>
+
+
+
+<!--8. Les problématiques de la parcelle (adventices, maladies, ravageurs, compaction), l’agriculteur peut sélectionner plusieurs choix et pour chacun un autre menu déroulant s’affiche avec le nom des maladies ou des rageurs à sélectionner par exemple.-->
+
+
+    <p id="declarationPAC"> Problèmes de la parcelle : </p>
+    
+     <div id="checkboxesZones">
+
+
+         <p>
+        <input id="compactionProbleme" type="checkbox" onclick="myFunction()">
+              <label for="compactionProbleme">Compactions</label>
+                 <label><input id="compactions" type="text" placeholder="renseignez les compactions" style="display:none"></label>
+        </p>
+        
+        <p>  <input id="adventicesProbleme" type="checkbox" onclick="myFunction()">
+            <label for="adventicesProbleme">Adventices</label> 
+             <label><input id="adventices" type="text" placeholder="renseignez les adventices" style="display:none"></label>
+             
+          </p>
+          
+            <p>  <input id="maladiesProbleme" type="checkbox" onclick="myFunction()">
+              <label for="maladiesProbleme">Maladies</label>
+              <label><input id="maladies" type="text" placeholder="renseignez les maladies" style="display:none"></label>
+          
+          </p>
+          <p>    <input id="ravageursProbleme" type="checkbox" onclick="myFunction()">
+              <label for="ravageursProbleme">Ravageurs</label>
+               <label><input id="ravageurs" type="text" placeholder="renseignez les ravageurs" style="display:none"></label> 
+          
+      </p>
+          
+       
+        </div>
+
+
+    
+
+    
+  
+   
+    
+ 
+
+  
+
+
+  
+
+<!--- Autres remarques sur cette parcelle (à ajouter)-->
+
+      <p id="declarationPAC">
+          <label>Autres remarques sur cette parcelle<input id = "remParcelle" type="text" placeholder ="autres remarques"/></label>
+      </p>
+
+
+
+
+
+
+
+
+
+
+
+      <input type="button" id="NextParc" onclick="nextInFourthStep()" value="Parcelle suivante!" />
+      <input type="button" id="finalizeForm" value="Finir!" onclick="nextInFourthStep()"/>
+      <p id="noteBasPage">* Ce champ n'est pas obligatoire</p>
+    </div>
+
+    <!-- Message de fin, indiquant que l'agriculteur recevra via e-mail son conseil sur couvert végétal -->
+    <div id="FinalStep">
+      <p>
+        Merci beaucoup d'avoir rempli ce formulaire, vous recevrez un mail lors de la réception de vos informations!
+      </p>
+    </div>
+</body>
